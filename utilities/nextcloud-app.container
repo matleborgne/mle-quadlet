@@ -1,0 +1,38 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Nextcloud (app)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Self hosted cloud
+# Method : Quadlet
+# Variables to set : lanIp, hostData, dbPass
+
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+Requires=nextcloud-db.container
+After=nextcloud-db.container
+
+[Container]
+ContainerName=nextcloud-app
+Image=docker.io/library/nextcloud:29
+User=1000
+Group=100
+
+Environment=POSTGRES_DB=nextcloud
+Environment=POSTGRES_USER=nextcloud
+Environment=POSTGRES_PASSWORD=${dbPass}
+Environment=POSTGRES_HOST=nextcloud-db
+
+Network=mvlan0:ip=${lanIp}
+Network=nextcloud.network
+
+Volume=${hostData}/app:/var/www/html
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
