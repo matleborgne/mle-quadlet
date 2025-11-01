@@ -1,0 +1,47 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Scrutiny
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Hard drive SMART health control
+# Method : Quadlet
+# Variables to set : lanIp, hostData
+
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+[Container]
+ContainerName=scrutiny
+Image=ghcr.io/analogj/scrutiny:master-omnibus
+
+Environment=TZ=Europe/Paris
+Environment=PUID=1000
+Environment=PGID=100
+Environment=COLLECTOR_CRON_SCHEDULE="0 * * * *"
+
+Network=mvlan0:ip=${lanIp}
+
+AddCapability=SYS_RAWIO
+AddCapability=SYS_ADMIN
+
+Volume=${hostData}/app:/opt/scrutiny/config
+Volume=${hostData}/db:/opt/scrutiny/influxdb
+Volume=/run/udev:/run/udev:ro
+
+# Change devices here
+AddDevice=/dev/sda:/dev/sda:ro
+AddDevice=/dev/sdb:/dev/sdb:ro
+AddDevice=/dev/sdc:/dev/sdc:ro
+AddDevice=/dev/sdd:/dev/sdd:ro
+AddDevice=/dev/sde:/dev/sde:ro
+AddDevice=/dev/sdf:/dev/sdf:ro
+AddDevice=/dev/nvme0n1:/dev/nvme0n1:ro
+AddDevice=/dev/nvme1n1:/dev/nvme1n1:ro
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
