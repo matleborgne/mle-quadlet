@@ -17,7 +17,7 @@ Image=ghcr.io/dani-garcia/vaultwarden:latest
 Exec=/start.sh
 
 Environment=TZ=Europe/Paris
-Environment=I_REALLY_WANT_VOLATILE_STORAGE=true
+#Environment=I_REALLY_WANT_VOLATILE_STORAGE=true #for testing purpose
 Network=mvlan0:ip=${lanIp}
 
 Volume=${hostData}:/data
