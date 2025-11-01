@@ -1,0 +1,30 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Vaultwarden
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Self-hosted password manager
+# Method : Quadlet
+# Set variables : lanIp, hostData 
+
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+[Container]
+ContainerName=vaultwarden
+Image=ghcr.io/dani-garcia/vaultwarden:latest
+Exec=/start.sh
+
+Environment=TZ=Europe/Paris
+Environment=I_REALLY_WANT_VOLATILE_STORAGE=true
+Network=mvlan0:ip=${lanIp}
+
+Volume=${hostData}:/data
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
