@@ -1,0 +1,19 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Nextcloud
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Self hosted cloud
+# Method : Quadlet
+# Variables to set : none
+
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+[Network]
+NetworkName=nextcloud
+Driver=bridge
+
+[Install]
+WantedBy=default.target
