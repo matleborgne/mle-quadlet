@@ -1,0 +1,42 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Wireguard - WG easy (app)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Easy WEBUI for wireguard
+# Method : Quadlet
+# Variables to set : lanIp, hostData
+  
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+[Container]
+ContainerName=wg-easy
+Image=ghcr.io/wg-easy/wg-easy:15
+
+Environment=INSECURE=true #for testing purpose
+#Environment=WG_HOST=YOURDOMAIN
+#Environment=WG_ALLOWED_IPS=10.0.0.0/8
+
+Network=mvlan0:ip=${lanIp}
+Network=wireguard.network
+
+AddCapability=NET_ADMIN
+AddCapability=NET_RAW
+AddCapability=SYS_MODULE
+Sysctl=net.ipv4.ip_forward=1
+Sysctl=net.ipv4.conf.all.src_valid_mark=1
+Sysctl=net.ipv6.conf.all.disable_ipv6=0
+Sysctl=net.ipv6.conf.all.forwarding=1
+Sysctl=net.ipv6.conf.default.forwarding=1
+
+Volume=${hostData}/wg-easy:/etc/wireguard
+Volume=/lib/modules:/lib/modules:ro
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
