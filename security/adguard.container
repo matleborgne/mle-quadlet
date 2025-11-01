@@ -1,0 +1,29 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Adguard
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Remove ads from LAN and use of secure DNS
+# Method : Quadlet
+# Variables to set : lanIp, hostData
+
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+[Container]
+ContainerName=adguard
+Image=docker.io/adguard/adguardhome:latest
+
+Environment=TZ=Europe/Paris
+Network=mvlan0:ip=${lanIp}
+
+Volume=${hostData}/config:/opt/adguardhome/conf
+Volume=${hostData}/work:/opt/adguardhome/work
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
