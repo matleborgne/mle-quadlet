@@ -1,0 +1,33 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Nextcloud (db)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Self hosted cloud
+# Method : Quadlet
+# Variables to set : hostData, dbPass
+
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+[Container]
+ContainerName=nextcloud-db
+Image=docker.io/library/postgres:16
+User=1000
+Group=100
+
+Environment=POSTGRES_DB=nextcloud
+Environment=POSTGRES_USER=nextcloud
+Environment=POSTGRES_PASSWORD=${dbPass}
+
+Network=nextcloud.network
+
+Volume=${hostData}/db:/var/lib/postgresql/data
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=default.target
