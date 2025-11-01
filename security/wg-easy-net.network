@@ -1,0 +1,23 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+# Wireguard - WG easy (net)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Aim : Easy WEBUI for wireguard
+# Method : Quadlet
+# Variables to set : ip4sub, ip6sub
+  
+[Unit]
+Wants=network-online.target
+After=network-online.target
+After=local-fs.target
+
+[Network]
+NetworkName=wireguard
+Driver=bridge
+
+IPv6=true
+Subnet=${ip4sub}/24
+Subnet=${ip6sub}/64
+
+[Install]
+WantedBy=default.target
