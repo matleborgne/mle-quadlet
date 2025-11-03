@@ -4,7 +4,7 @@
 
 # Aim : Self-hosted password manager
 # Method : Quadlet
-# Set variables : lanIp, hostData 
+# Variables to set : lanIp, hostData 
 
 [Unit]
 Wants=network-online.target
